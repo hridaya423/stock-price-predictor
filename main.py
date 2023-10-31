@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, url_for, flash, redirect
 from flask_bootstrap import Bootstrap5
-from backend import Microsoft, Tesla, Apple, Amazon
+from backend import project
 from datetime import date
 
 from flask_wtf import FlaskForm, CSRFProtect
@@ -49,13 +49,13 @@ def predict():
         predicted_price = 0
         name = request.form['name']
         if name == 'Microsoft':
-            predicted_price = Microsoft.predict({'Date': date.today()})
+            predicted_price = project.models.get('microsoftpredictor').predict({'Date': date.today()})
         elif name == 'Apple':
-            predicted_price = Apple.predict({'Date': date.today()})
+            predicted_price = project.models.get('applepredictor').predict({'Date': date.today()})
         elif name == 'Amazon':
-            predicted_price = Amazon.predict({'Date': date.today()})
+            predicted_price = project.models.get('amazonpredictor').predict({'Date': date.today()})
         else:
-            predicted_price = Tesla.predict({'Date': date.today()})
+            predicted_price = project.models.get('teslapredictor').predict({'Date': date.today()})
 
  
         pprice = "The predicted price for today's " + name + " stocks  is: " + f"{predicted_price}"

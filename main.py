@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, url_for, flash, redirect
 from flask_bootstrap import Bootstrap5
 from backend import project
 from datetime import date
-
+import pandas as pd
 from flask_wtf import FlaskForm, CSRFProtect
 from wtforms import StringField, SubmitField, SelectField, widgets
 from wtforms.validators import InputRequired
@@ -48,14 +48,15 @@ def predict():
     if request.method == 'POST':
         predicted_price = 0
         name = request.form['name']
+        df = pd.DataFrame({'Date': date.today()})
         if name == 'Microsoft':
-            predicted_price = project.models.get('microsoftpredictor').predict({'Date': date.today()})
+            predicted_price = project.models.get('microsoftpredictor').predict(df)
         elif name == 'Apple':
-            predicted_price = project.models.get('applepredictor').predict({'Date': date.today()})
+            predicted_price = project.models.get('applepredictor').predict(df)
         elif name == 'Amazon':
-            predicted_price = project.models.get('amazonpredictor').predict({'Date': date.today()})
+            predicted_price = project.models.get('amazonpredictor').predict(df)
         else:
-            predicted_price = project.models.get('teslapredictor').predict({'Date': date.today()})
+            predicted_price = project.models.get('teslapredictor').predict(df)
 
  
         pprice = "The predicted price for today's " + name + " stocks  is: " + f"{predicted_price}"
